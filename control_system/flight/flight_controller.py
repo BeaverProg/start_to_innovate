@@ -1,6 +1,9 @@
 import math
 import time
+import uuid
+from datetime import datetime, timezone
 
+import requests
 import rclpy
 from geographic_msgs.msg import GeoPoint
 from geometry_msgs.msg import TwistStamped
@@ -103,6 +106,11 @@ class TFL(Node):
         )
 
         self._egm96 = GeoidPGM("/usr/share/GeographicLib/geoids/egm96-5.pgm", kind=-3)
+
+        self.mission_id = "00000000-0000-0000-0000-000000000000"  # To be set
+        self.flight_id = str(uuid.uuid4())
+
+        self.telemetry_timer = self.create_timer(1.0, self.send_telemetry)
 
         self.position_adjustment_timestamp = (
             None  # время начала поиска посадочной метки
@@ -283,6 +291,27 @@ class TFL(Node):
     def log_data_callback(self):
         log = f"{self.current_flight_phase.name},{self.current_flight_phase.status},{self.current_state.armed},{self.current_state.mode},{self.current_global_position.latitude},{self.current_global_position.longitude},{self.current_altitude_home},{self.current_global_position.altitude},{self.current_altitude_rangefinder},{self.battery_state.current},{self.battery_state.percentage},{self.battery_state.voltage},{self.home_position.geo.latitude},{self.home_position.geo.longitude},{self.home_position.geo.altitude},{self.sys_messages.severity},{self.sys_messages.text}"
         self.log_file.append_string(log)
+
+    def send_telemetry(self):
+        try:
+            telemetry_data = {
+                "mission_id": self.mission_id,
+                "flight_id": self.flight_id,
+                "timestamp": datetime.now(timezone.utc),
+                "battery_voltage": float(self.battery_state.voltage),
+                "latitude": float(self.current_global_position.latitude),
+                "longitude": float(self.current_global_position.longitude),
+                "altitude_amsl": float(self.current_global_position.altitude),
+                "altitude_at": float(self.current_altitude_rangefinder),
+                "speed": 0.0,
+                "mode": str(self.current_state.mode),
+                "armed": bool(self.current_state.armed),
+            }
+            # Assuming web_interface is on localhost:8000
+            requests.post("http://localhost:8000/api/telemetry", json=telemetry_data, timeout=0.5)
+        except Exception as e:
+            if DEBUG:
+                self.get_logger().error(f"Failed to send telemetry: {e}")
 
     def land_drone(self):
         self.get_logger().info("Landing drone...")

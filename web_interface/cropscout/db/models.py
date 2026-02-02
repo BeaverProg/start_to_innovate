@@ -70,3 +70,34 @@ class Mission(SQLModel, table=True):
 
     route_id: UUID = Field(foreign_key='route.id')
     route: Route = Relationship(back_populates='missions')
+
+
+class Telemetry(SQLModel, table=True):
+    mission_id: UUID = Field(foreign_key='mission.id')
+    flight_id: UUID = Field(primary_key=True)
+    timestamp: datetime = Field(primary_key=True)
+
+    battery_voltage: float
+    latitude: float
+    longitude: float
+    altitude_amsl: float
+    altitude_at: float
+    speed: float
+    mode: str
+    armed: bool
+
+    # Insert example:
+    #
+    # {
+    #     "mission_id": "550e8400-e29b-41d4-a716-446655440000",
+    #     "flight_id": "550e8400-e29b-41d4-a716-446655440000",
+    #     "timestamp": "2026-02-02 14:37:18.542931+00:00",
+    #     "battery_voltage": 24.18,
+    #     "latitude": 55.725517,
+    #     "longitude": 37.915539,
+    #     "altitude_amsl": 157.12,
+    #     "altitude_at": 0.03,
+    #     "speed": 1.2,
+    #     "armed": false,
+    #     "mode": "STABILIZE"
+    # }

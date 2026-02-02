@@ -96,3 +96,4 @@ watchfiles==1.0.4
     # via uvicorn
 websockets==15.0
     # via uvicorn
+sqlmodel==0.0.16

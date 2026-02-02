@@ -25,6 +25,7 @@ from db.models import (
     Waypoint,
     WaypointVisit,
     RouteStatus,
+    Telemetry,
 )
 from models import PasswordUpdate, RouteModel, UserCredentials, convert_db_route
 
@@ -354,6 +355,21 @@ async def get_home():
     with Path.open(STATIC_ROOT / 'index.html') as f:
         content = f.read()
     return content
+
+
+@app.post('/api/telemetry')
+async def post_telemetry(telemetry_data: dict, db: Session = Depends(get_session)):
+    if 'timestamp' in telemetry_data and isinstance(telemetry_data['timestamp'], str):
+        try:
+            # Преобразование строки ISO в объект datetime
+            telemetry_data['timestamp'] = datetime.fromisoformat(telemetry_data['timestamp'].replace('Z', '+00:00'))
+        except ValueError:
+            pass
+    
+    telemetry = Telemetry(**telemetry_data)
+    db.add(telemetry)
+    db.commit()
+    return {'status': 'ok'}
 
 
 if __name__ == '__main__':
