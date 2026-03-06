@@ -19,7 +19,7 @@
             overflow: hidden;
         }
 
-        .container {
+        .main_container {
             display: grid;
             grid-template-columns: 300px 1fr;
             height: 100vh;
@@ -27,14 +27,35 @@
             padding: 20px;
         }
 
-        .panel {
+        .panels_container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: 100%;
+        }
+
+        .routes_panel {
             background: rgba(25, 25, 35, 0.8);
             border-radius: 15px;
             padding: 20px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             overflow-y: auto;
-            max-height: 100%;
+            max-height: 80%;
+        }
+
+        .transfer_data_panel {
+            background: rgba(25, 25, 35, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+            max-height: 20%;
+
+            display: flex;
+            justify-content: center;   /* horizontal center */
+            align-items: center;       /* vertical center */
         }
 
         .main-view {
@@ -479,8 +500,9 @@
 </div>
 
 <!-- Main Application Container -->
-<div class="container" id="appContainer" style="display: none;">
-    <div class="panel">
+<div class="main_container" id="appContainer" style="display: none;">
+    <div class="panels_container">
+        <div class="routes_panel">
         <h2>Saved Routes</h2>
         <ul class="route-list" id="routeList">
             <!-- Routes will be populated here -->
@@ -496,6 +518,9 @@
             <button class="action-button danger" id="clearRouteBtn">Clear Route</button>
         </div>
     </div>
+        <a href="/telemetry_visualisation" class="transfer_data_panel"><h2>Flight Data</h2></a>
+    </div>
+
 
     <div class="main-view">
         <div class="user-menu">

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Agricultural Drone Telemetry Visualisation</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #0a0a0f;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .main_container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            height: 100vh;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .panels_container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: 100%;
+        }
+
+        .sort_panel {
+            background: rgba(25, 25, 35, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+            max-height: 80%;
+        }
+
+        .transfer_map_panel {
+            background: rgba(25, 25, 35, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+            max-height: 10%;
+
+            cursor: pointer;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h2 {
+            color: #00ffff;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ffff;
+            font-size: 0.9em;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #00ffff;
+        }
+
+        .form-group select option {
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Main Application Container -->
+<div class="main_container">
+    <div class="panels_container">
+        <div class="panels_container">
+            <div class="sort_panel">
+            <h2>Telemetry Sorting</h2>
+
+            <div class="form-group">
+                <label for="route_select">Select Route</label>
+                <select id="route_select">
+                    <option value="">-- Choose a route --</option>
+                    <!-- Routes will be populated here -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="date_time_select">Select Date and Time</label>
+                <input type="datetime-local" id="date_time_select" step="1">
+            </div>
+        </div>
+            <a href="/index" class="transfer_map_panel"><h2>Map</h2></a>
+        </div>
+
+    </div>
+</div>
+
+<script src="/static/telemetry_visualisation.js"></script>
+
+</body>
+</html>

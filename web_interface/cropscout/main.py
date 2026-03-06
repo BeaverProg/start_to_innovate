@@ -371,6 +371,16 @@ async def post_telemetry(telemetry_data: dict, db: Session = Depends(get_session
     db.commit()
     return {'status': 'ok'}
 
+@app.get("/telemetry_visualisation", response_class=HTMLResponse)
+async def telemetry_page():
+    with open("static/telemetry_visualisation.html", "r", encoding="utf-8") as f:
+        return f.read()
+
+@app.get("/index", response_class=HTMLResponse)
+async def telemetry_page():
+    with open("static/index.html", "r", encoding="utf-8") as f:
+        return f.read()
+
 
 if __name__ == '__main__':
     setup_db()
